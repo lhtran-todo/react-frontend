@@ -29,13 +29,14 @@ longhtran91/todo-frontend
 
 ## Docker compose (without proxying Backend API)
 ```
-name: Todo App
+version: '3.1'
+
 services:
   todo-frontend:
     container_name: todo-frontend
     environment:
       - PORT=80
-      - RUNTIME_API_URL= https://todo.domain.tld/api/
+      - RUNTIME_API_URL=https://todo.domain.tld/api/
       - RUNTIME_ENABLE_BACKEND_PROXY=false
     ports:
       - 3000:80/tcp
