@@ -27,7 +27,7 @@ docker run \
 longhtran91/todo-frontend
 ```
 
-## Docker compose
+## Docker compose (without proxying Backend API)
 ```
 name: Todo App
 services:
@@ -42,7 +42,7 @@ services:
     image: longhtran91/todo-frontend
 ```
 
-## Kubernetes
+## Kubernetes (proxying Backend API)
 ```
 ---
 apiVersion: apps/v1
