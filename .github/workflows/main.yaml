@@ -38,4 +38,4 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/todo-backend:${{ vars.ENV_IMAGE_TAG }}, ${{ secrets.DOCKER_HUB_USERNAME }}/todo-backend:${{ steps.get_short_sha.outputs.short_sha }}
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/todo-frontend:${{ vars.ENV_IMAGE_TAG }}, ${{ secrets.DOCKER_HUB_USERNAME }}/todo-frontend:${{ steps.get_short_sha.outputs.short_sha }}
