@@ -101,7 +101,7 @@ spec:
     spec:
       containers:
         - name: todo-frontend
-          image: longhtran91/todo-frontend:dev
+          image: longhtran91/todo-frontend
           imagePullPolicy: Always
           ports:
             - containerPort: 80
@@ -149,7 +149,7 @@ spec:
     spec:
       containers:
         - name: todo-backend
-          image: longhtran91/todo-backend:dev
+          image: longhtran91/todo-backend
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
