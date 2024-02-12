@@ -27,7 +27,7 @@ docker run \
 longhtran91/todo-frontend
 ```
 
-## Docker compose (without proxying Backend API)
+## Docker compose (WITHOUT proxying Backend API)
 ```
 version: '3.1'
 
@@ -41,6 +41,28 @@ services:
     ports:
       - 3000:80/tcp
     image: longhtran91/todo-frontend
+```
+
+## Docker compose (Proxying Backend API)
+```
+version: '3.1'
+services:
+  todo-frontend:
+    container_name: todo-frontend
+    environment:
+      - PORT=80
+      - RUNTIME_API_URL=/apis/
+      - RUNTIME_ENABLE_BACKEND_PROXY=true
+      - RUNTIME_PROXY_BACKEND=http://todo-backend:8000/ # this matches the todo-backend service
+    ports:
+      - 3000:80/tcp
+    image: longhtran91/todo-frontend
+  todo-backend:
+    container_name: todo-backend
+    environment:
+      - DB_STRING=mysql+pymysql://user:pass@mariadb_hostname/dbname
+      - PORT=8000
+    image: longhtran91/todo-backend
 ```
 
 ## Kubernetes (proxying Backend API)
