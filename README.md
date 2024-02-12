@@ -67,6 +67,20 @@ services:
 
 ## Kubernetes (proxying Backend API)
 ```
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-frontend-svc
+  namespace: todo
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+  type: ClusterIP
+  selector:
+    app: todo-frontend
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -87,7 +101,8 @@ spec:
     spec:
       containers:
         - name: todo-frontend
-          image: longhtran91/todo-frontend
+          image: longhtran91/todo-frontend:dev
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           env:
@@ -98,7 +113,7 @@ spec:
             - name: RUNTIME_ENABLE_BACKEND_PROXY
               value: "true"
             - name: RUNTIME_PROXY_BACKEND
-              value: http://todo-backend-svc:8000/ # this matches the todo-backend-svc service and port                               
+              value: http://todo-backend-svc:8000/                               
 ---
 apiVersion: v1
 kind: Service
@@ -134,12 +149,13 @@ spec:
     spec:
       containers:
         - name: todo-backend
-          image: longhtran91/todo-backend
+          image: longhtran91/todo-backend:dev
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
           env:
             - name: APP_PORT
-              value: 8000
+              value: "8000"
             - name: DB_STRING
               valueFrom:
                 secretKeyRef:
