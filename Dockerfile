@@ -8,7 +8,7 @@ RUN yarn build
 
 FROM nginx:alpine
 ENV RUNTIME_ENABLE_BACKEND_PROXY=false \
-    PORT=80
+    APP_PORT=80
 
 COPY scripts /env-config
 RUN chmod +x /env-config/*.sh

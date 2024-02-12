@@ -20,7 +20,7 @@ yarn build
 docker run \
 -d \
 --name todo-frontend \
--e PORT=80 \
+-e APP_PORT=80 \
 -e RUNTIME_API_URL= https://todo.domain.tld/api/ \
 -e RUNTIME_ENABLE_BACKEND_PROXY=false \
 -p 3000:80/tcp \
@@ -35,7 +35,7 @@ services:
   todo-frontend:
     container_name: todo-frontend
     environment:
-      - PORT=80
+      - APP_PORT=80
       - RUNTIME_API_URL=https://todo.domain.tld/api/
       - RUNTIME_ENABLE_BACKEND_PROXY=false
     ports:
@@ -50,7 +50,7 @@ services:
   todo-frontend:
     container_name: todo-frontend
     environment:
-      - PORT=80
+      - APP_PORT=80
       - RUNTIME_API_URL=/apis/
       - RUNTIME_ENABLE_BACKEND_PROXY=true
       - RUNTIME_PROXY_BACKEND=http://todo-backend:8000/ # this matches the todo-backend service
@@ -61,7 +61,7 @@ services:
     container_name: todo-backend
     environment:
       - DB_STRING=mysql+pymysql://user:pass@mariadb_hostname/dbname
-      - PORT=8000
+      - APP_PORT=8000
     image: longhtran91/todo-backend
 ```
 
@@ -91,14 +91,14 @@ spec:
           ports:
             - containerPort: 80
           env:
-            - name: PORT
-              value: 80
+            - name: APP_PORT
+              value: "80"
             - name: RUNTIME_API_URL
               value: /api/
             - name: RUNTIME_ENABLE_BACKEND_PROXY
-              value: true
+              value: "true"
             - name: RUNTIME_PROXY_BACKEND
-              value: http://todo-backend-svc:8000 # this matches the todo-backend-svc service and port                               
+              value: http://todo-backend-svc:8000/ # this matches the todo-backend-svc service and port                               
 ---
 apiVersion: v1
 kind: Service
@@ -138,7 +138,7 @@ spec:
           ports:
             - containerPort: 8000
           env:
-            - name: PORT
+            - name: APP_PORT
               value: 8000
             - name: DB_STRING
               valueFrom:
