@@ -40,7 +40,7 @@ class App extends Component {
 
     if (item.id) {
       axios
-        .put(`/todos/${item.id}/`, item)
+        .put(`/todos/${item.id}`, item)
         .then((res) => this.refreshList());
       return;
     }
@@ -51,7 +51,7 @@ class App extends Component {
 
   handleDelete = (item) => {
     axios
-      .delete(`/todos/${item.id}/`)
+      .delete(`/todos/${item.id}`)
       .then((res) => this.refreshList());
   };
 
