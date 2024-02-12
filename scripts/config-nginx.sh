@@ -6,7 +6,7 @@ escape_slashes() {
     echo "$escaped_input"
 }
 
-port=$(printenv | grep "PORT" | awk -F'=' '{print $2}')
+port=$(printenv | grep "APP_PORT" | awk -F'=' '{print $2}')
 sed -i "s/\$PORT/$port/g" "$1"
 
 enable_backend_proxy=$(printenv | grep "RUNTIME_ENABLE_BACKEND_PROXY" | awk -F'=' '{print $2}')
