@@ -60,27 +60,16 @@ services:
   todo-backend:
     container_name: todo-backend
     environment:
-      - DB_STRING=mysql+pymysql://user:pass@mariadb_hostname/dbname
+      - DB_CRED_FILE_PATH="/etc/secrets/db_cred.json"
+      - DB_CONNECTION_FILE_PATH="/etc/secrets/db_conn.json"
       - APP_PORT=8000
+    ports:
+      - 8000:8000/tcp
     image: longhtran91/todo-backend
 ```
 
 ## Kubernetes (proxying Backend API)
 ```
-apiVersion: v1
-kind: Service
-metadata:
-  name: todo-frontend-svc
-  namespace: todo
-spec:
-  ports:
-    - name: http
-      port: 80
-      targetPort: 80
-      protocol: TCP
-  type: ClusterIP
-  selector:
-    app: todo-frontend
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -113,7 +102,7 @@ spec:
             - name: RUNTIME_ENABLE_BACKEND_PROXY
               value: "true"
             - name: RUNTIME_PROXY_BACKEND
-              value: http://todo-backend-svc:8000/                               
+              value: http://todo-backend-svc:8000/ # this matches the todo-backend-svc service                       
 ---
 apiVersion: v1
 kind: Service
@@ -129,45 +118,4 @@ spec:
   type: ClusterIP
   selector:
     app: todo-backend
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: todo-backend-deployment
-  namespace: todo
-  labels:
-    app: todo-backend
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: todo-backend
-  template:
-    metadata:
-      labels:
-        app: todo-backend
-    spec:
-      containers:
-        - name: todo-backend
-          image: longhtran91/todo-backend
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 8000
-          env:
-            - name: APP_PORT
-              value: "8000"
-            - name: DB_STRING
-              valueFrom:
-                secretKeyRef:
-                  name: todo-backend-secret
-                  key: DB_STRING
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: todo-backend-secret
-  namespace: todo
-type: Opaque
-data:
-  DB_STRING: bXlzcWwrcHltcXlvdTp1c2VyOnBhc3NAcmVmcmVzaEBtYXJpYWRiX2hvc3RvbmdpbmVkL2Ri #base64-encoded
 ```
