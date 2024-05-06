@@ -37,15 +37,15 @@ jobs:
         if: ${{ (github.head_ref || github.ref_name) == 'main' }}
         with:
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64, linux/arm64
           push: true
           tags: ${{ vars.DOCKER_HUB_USERNAME }}/todo-frontend:latest, ${{ vars.DOCKER_HUB_USERNAME }}/todo-frontend:${{ vars.ENV_IMAGE_TAG }}, ${{ vars.DOCKER_HUB_USERNAME }}/todo-frontend:${{ steps.get_short_sha.outputs.short_sha }}
 
       - name: Build and push dev
         uses: docker/build-push-action@v5
-        if: ${{ (github.head_ref || github.ref_name) == 'main' }}
+        if: ${{ (github.head_ref || github.ref_name) != 'main' }}
         with:
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64, linux/arm64
           push: true
           tags: ${{ vars.DOCKER_HUB_USERNAME }}/todo-frontend:${{ vars.ENV_IMAGE_TAG }}, ${{ vars.DOCKER_HUB_USERNAME }}/todo-frontend:${{ steps.get_short_sha.outputs.short_sha }}
